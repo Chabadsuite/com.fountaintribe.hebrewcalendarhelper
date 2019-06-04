@@ -101,7 +101,7 @@ class HebrewCalendar {
   const HEB_NEXT_BIRTHDAY_TITLE = "Next Hebrew Birthday";
 
   const HEB_EARLIEST_BARBAT_MITZVAH_NAME = "Hebrew_Earliest_BarBat_Date";
-  const HEB_EARLIEST_BARBAT_MITZVAH_TITLE = "Earliest Possible Bar/Bat Mitzvah Date (Starts at sunset on this date)";
+  const HEB_EARLIEST_BARBAT_MITZVAH_TITLE = "Bar/Bat Mitzvah Date (Starts at sunset on this date)";
 
   const RELIGIOUS_CUSTOM_FIELD_GROUP_NAME = "Religious";
   const RELIGIOUS_CUSTOM_FIELD_GROUP_TITLE = "Religious";
