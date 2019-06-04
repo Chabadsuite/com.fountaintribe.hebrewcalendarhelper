@@ -109,6 +109,9 @@ class HebrewCalendar {
   const HEB_NAME_FIELD_TITLE = "Hebrew Name";
   const HEB_NAME_FIELD_NAME = "Hebrew_Name";
 
+  const HEB_NAME_MOTHER_FIELD_NAME = "hebrew_name_mother";
+  const HEB_NAME_FATHER_FIELD_NAME = "hebrew_name_father";
+
   const HEB_NAME_PARENTS_FIELD_TITLE = "Hebrew Names of Parents";
   const HEB_NAME_PARENTS_FIELD_NAME = "Hebrew_Names_of_Parents";
 
@@ -3999,6 +4002,26 @@ class HebrewCalendar {
     }
 
     return $tmp_schema_name;
+  }
+
+  /**
+   * Helper function to get the SQL table name for a custom group.
+   *
+   * @param String $custom_group_name
+   *   Machine name for the custom group.
+   * @return String or NULL
+   */
+  public static function getSQLTableName(String $custom_group_name) {
+    $result = civicrm_api3('CustomGroup', 'get', [
+      'sequential' => 1,
+      'name' => $custom_group_name,
+    ]);
+
+    if ($result['count'] == 1) {
+      return $result['values'][0]['table_name'];
+    }
+
+    return NULL;
   }
 
   private static function XXXremoveStaleRecords($yahrzeit_table_name, $tmp_limit){
