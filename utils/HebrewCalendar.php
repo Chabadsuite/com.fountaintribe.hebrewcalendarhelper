@@ -445,11 +445,11 @@ class HebrewCalendar {
           }
           else if($tmp_label == "grandparent"){ $tmp_label = "grandmother";
           }
-          else if($tmp_label == "step-parent"){ $tmp_label = "step-mother";
+          else if($tmp_label == "step-parent" || $tmp_label == "step parent"){ $tmp_label = "step mother";
           }
           else if($tmp_label == "child"){ $tmp_label = "daughter";
           }
-          else if($tmp_label == "step-child"){ $tmp_label = "step-daughter";
+          else if($tmp_label == "step-child" || $tmp_label == "step child"){ $tmp_label = "step daughter";
           }
           else if($tmp_label == "grandchild"){ $tmp_label = "granddaughter";
           }
@@ -457,11 +457,13 @@ class HebrewCalendar {
           }
           else if($tmp_label == "uncle is"){ $tmp_label = "niece";
           }
-          else if($tmp_label == "parent-in-law"){ $tmp_label = "mother-in-law";
+          else if($tmp_label == "uncle/aunt"){ $tmp_label = "niece";
           }
-          else if($tmp_label == "child-in-law"){ $tmp_label = "daughter-in-law";
+          else if($tmp_label == "parent-in-law" || $tmp_label == "parent in law"){ $tmp_label = "mother in law";
           }
-          else if($tmp_label == "sibling-in-law"){ $tmp_label = "sister-in-law";
+          else if($tmp_label == "child-in-law" || $tmp_label == "child in law"){ $tmp_label = "daughter in law";
+          }
+          else if($tmp_label == "sibling-in-law" || $tmp_label == "sibling in law"){ $tmp_label = "sister in law";
           }
 
         }else if($deceased_gender == "Male"){
@@ -473,11 +475,11 @@ class HebrewCalendar {
           }
           else if($tmp_label == "grandparent"){ $tmp_label = "grandfather";
           }
-          else if($tmp_label == "step-parent"){ $tmp_label = "step-father";
+          else if($tmp_label == "step-parent" || $tmp_label == "step parent"){ $tmp_label = "step father";
           }
           else if($tmp_label == "child"){ $tmp_label = "son";
           }
-          else if($tmp_label == "step-child"){ $tmp_label = "step-son";
+          else if($tmp_label == "step-child" || $tmp_label == "step child"){ $tmp_label = "step son";
           }
           else if($tmp_label == "grandchild"){ $tmp_label = "grandson";
           }
@@ -485,11 +487,13 @@ class HebrewCalendar {
           }
           else if($tmp_label == "uncle is"){ $tmp_label = "nephew";
           }
-          else if($tmp_label == "parent-in-law"){ $tmp_label = "father-in-law";
+          else if($tmp_label == "uncle/aunt"){ $tmp_label = "nephew";
           }
-          else if($tmp_label == "child-in-law"){ $tmp_label = "son-in-law";
+          else if($tmp_label == "parent-in-law" || $tmp_label == "parent in law"){ $tmp_label = "father in law";
           }
-          else if($tmp_label == "sibling-in-law"){ $tmp_label = "brother-in-law";
+          else if($tmp_label == "child-in-law" || $tmp_label == "child in law"){ $tmp_label = "son in law";
+          }
+          else if($tmp_label == "sibling-in-law" || $tmp_label == "sibling in law"){ $tmp_label = "brother in law";
           }
 
         }else{
