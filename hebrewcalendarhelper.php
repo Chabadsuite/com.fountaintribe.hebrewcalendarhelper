@@ -118,7 +118,7 @@ function hebrewcalendarhelper_civicrm_tokenValues(&$values, &$contactIDs, $job =
     }
   }
 
-  if(!empty($tokens['yahrzeit']) ) {
+  if (!empty($tokens['yahrzeit'])) {
     // Since we are going to fill in all possible yahrzeit tokens, even if the user did not selet them
     // we need to make sure that the unused tokens are not empty strings.
     // All the token data is in the  database table, and were do not want to query it for each token.

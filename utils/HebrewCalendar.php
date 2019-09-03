@@ -2639,12 +2639,10 @@ class HebrewCalendar {
 
     // old parm: $token_yahrzeits_short
     //  yahrzeit_morning_format_english
-    // print "<br><br>Inside process yahrzeit tokens: ".$token_yah_english_date_morning ;
 
-    $default_parm = "";
+    $default_parm = '';
 
-    $date_token_as_array = explode("_", $token_date_portion  );
-
+    $date_token_as_array = explode('_', $token_date_portion);
     $date_interval_from_token = $date_token_as_array[0];
     $date_number_from_token = $date_token_as_array[1];
 
@@ -2674,30 +2672,29 @@ class HebrewCalendar {
       return;
     }
 
-    //CRM_Core_Error::debug(" date_interval: ".$date_interval_from_token , "" );
-    if( $date_interval_from_token == "day" ){
+    if ($date_interval_from_token == "day") {
       $interval_type_sql_str = "DAY";
 
       $date_where_clause = " AND yahrzeit_date >= CURDATE()
-					AND date(yahrzeit_date) = DATE(  CURDATE() + INTERVAL ".$date_number_from_token." ".$interval_type_sql_str." ) ";
-
-    }else if( $date_interval_from_token == 'week'){
+        AND date(yahrzeit_date) = DATE(CURDATE() + INTERVAL ".$date_number_from_token." ".$interval_type_sql_str.") ";
+    }
+    elseif ($date_interval_from_token == 'week') {
       $interval_type_sql_str = "WEEK";
 
       // week_start_day  is Sunday.
-      $date_where_clause = " AND week(yahrzeit_date, 0 ) = week( DATE(  CURDATE() + INTERVAL ".$date_number_from_token." ".$interval_type_sql_str." ), 0 )
-							               AND year(yahrzeit_date ) = year( DATE(  CURDATE() + INTERVAL ".$date_number_from_token." ".$interval_type_sql_str." )) ";
-    }else if( $date_interval_from_token == 'month'){
+      $date_where_clause = " AND week(yahrzeit_date, 0) = week(DATE(CURDATE() + INTERVAL ".$date_number_from_token." ".$interval_type_sql_str."), 0)
+        AND year(yahrzeit_date) = year(DATE(CURDATE() + INTERVAL ".$date_number_from_token." ".$interval_type_sql_str." )) ";
+    }
+    elseif ($date_interval_from_token == 'month') {
       $interval_type_sql_str = "MONTH";
 
-      $date_where_clause = " AND month(yahrzeit_date) = month( DATE(  CURDATE() + INTERVAL ".$date_number_from_token." ".$interval_type_sql_str." ))
-											AND year(yahrzeit_date) AND year(DATE(  CURDATE() + INTERVAL ".$date_number_from_token." ".$interval_type_sql_str." ))";
-    }else{
-      CRM_Core_Error::debug("Error in Yahrzeit token: interval type is not valid: ", $date_interval_from_token );
+      $date_where_clause = " AND month(yahrzeit_date) = month(DATE(CURDATE() + INTERVAL ".$date_number_from_token." ".$interval_type_sql_str." ))
+        AND year(yahrzeit_date) = year(DATE(CURDATE() + INTERVAL ".$date_number_from_token." ".$interval_type_sql_str." ))";
+    }
+    else {
+      CRM_Core_Error::debug("Error in Yahrzeit token: interval type is not valid: ", $date_interval_from_token);
       return;
     }
-
-    //CRM_Core_Error::debug("date clause: ".$date_where_clause );
 
     /*
 				session_start();
@@ -2881,54 +2878,56 @@ class HebrewCalendar {
     //				new col. name: yahrzeit_date_morning,
     //				old col. name: yahrzeit_morning_format_english ,
 
-    $config = CRM_Core_Config::singleton( );
+    $config = CRM_Core_Config::singleton();
     $tmp_system_date_format = $config->dateInputFormat;
 
     $this->_systemDateFormat = $tmp_system_date_format;
 
-    if($tmp_system_date_format == 'dd/mm/yy'){
+    if ($tmp_system_date_format == 'dd/mm/yy') {
       $nice_date_format = '%e %M %Y';
-
-    }else if($tmp_system_date_format == 'mm/dd/yy'){
+    }
+    elseif ($tmp_system_date_format == 'mm/dd/yy') {
       $nice_date_format = '%M %e, %Y';
-
-    }else if($tmp_system_date_format == 'd M yy'){
+    }
+    elseif ($tmp_system_date_format == 'd M yy') {
       $nice_date_format = '%e %M %Y';
-    }else{
+    }
+    else {
       $nice_date_format = '%e %M %Y';
       //print "<br>Configuration Issue: Unrecognized System date format: ".$tmp_system_date_format;
-
     }
 
     // yahrzeit_hebrew_date_format_hebrew - uses Hebrew characters.
     $yahrzeit_sql = "SELECT mourner_contact_id as contact_id,
-						mourner_contact_id as id, mourner_name as sort_name, deceased_name as deceased_name,
-    deceased_contact_table.display_name as deceased_display_name, deceased_contact_id,
-					date_format( yahrzeit_date  ,   '".$nice_date_format."' ) as yahrzeit_date_display,
-						date_format( deceased_contact_table.deceased_date , '".$nice_date_format."' ) as deceased_date,
-						yahrzeit_date, yahrzeit_hebrew_date_format_english, yahrzeit_hebrew_date_format_hebrew,
-						date_format( yahrzeit_date_morning , '".$nice_date_format."' ) as yahrzeit_date_morning ,
-					 date_format( yahrzeit_erev_shabbat_before, '".$nice_date_format."' ) as yah_erev_shabbat_before ,
-		 date_format( yahrzeit_shabbat_morning_before, '".$nice_date_format."' ) as yah_shabbat_morning_before,
-		 date_format( yahrzeit_erev_shabbat_after, '".$nice_date_format."' ) as yah_erev_shabbat_after ,
-		 date_format( yahrzeit_shabbat_morning_after, '".$nice_date_format."' ) as yah_shabbat_morning_after,
-    contact_b.deceased_date as ddate,
-    d_before_sunset, hebrew_deceased_date,
-     concat( year(yahrzeit_date), '-', month(yahrzeit_date), '-', day(yahrzeit_date)) as yahrzeit_date_sort ,
-						relationship_name_formatted,
-		 		shabbat_before_parashat,
-		 		shabbat_after_parashat,
-		 		shabbat_after_holiday , shabbat_after_holiday_hebrew,
-		 		shabbat_before_holiday , shabbat_before_holiday_hebrew,
+      mourner_contact_id as id, mourner_name as sort_name, deceased_name as deceased_name,
+      deceased_contact_table.display_name as deceased_display_name, deceased_contact_id,
+      date_format(yahrzeit_date, '".$nice_date_format."') as yahrzeit_date_display,
+      date_format(deceased_contact_table.deceased_date , '".$nice_date_format."' ) as deceased_date,
+      yahrzeit_date, yahrzeit_hebrew_date_format_english, yahrzeit_hebrew_date_format_hebrew,
+      date_format(yahrzeit_date_morning, '".$nice_date_format."') as yahrzeit_date_morning,
+      date_format(yahrzeit_erev_shabbat_before, '".$nice_date_format."') as yah_erev_shabbat_before,
+      date_format(yahrzeit_shabbat_morning_before, '".$nice_date_format."') as yah_shabbat_morning_before,
+      date_format(yahrzeit_erev_shabbat_after, '".$nice_date_format."') as yah_erev_shabbat_after ,
+      date_format( yahrzeit_shabbat_morning_after, '".$nice_date_format."' ) as yah_shabbat_morning_after,
+      contact_b.deceased_date as ddate,
+      d_before_sunset, hebrew_deceased_date,
+      concat(year(yahrzeit_date), '-', month(yahrzeit_date), '-', day(yahrzeit_date)) as yahrzeit_date_sort,
+      relationship_name_formatted,
+      shabbat_before_parashat, shabbat_after_parashat,
+      shabbat_after_holiday, shabbat_after_holiday_hebrew,
+      shabbat_before_holiday, shabbat_before_holiday_hebrew,
       yahrzeit_type, mourner_observance_preference
-       FROM ".$yahrzeit_temp_table_name." contact_b
-       INNER JOIN civicrm_contact contact_a ON contact_a.id = contact_b.mourner_contact_id
-       JOIN civicrm_contact deceased_contact_table ON deceased_contact_table.id = contact_b.deceased_contact_id
-       WHERE contact_b.created_date >= DATE_SUB(CURDATE(), INTERVAL 1 YEAR) AND (yahrzeit_type = mourner_observance_preference)
-        AND contact_b.mourner_contact_id in (   $cid_list ) ".$date_where_clause."  ORDER BY sort_name asc";
+      FROM ".$yahrzeit_temp_table_name." contact_b
+      INNER JOIN civicrm_contact contact_a ON contact_a.id = contact_b.mourner_contact_id
+      JOIN civicrm_contact deceased_contact_table ON deceased_contact_table.id = contact_b.deceased_contact_id
+      WHERE contact_b.created_date >= DATE_SUB(CURDATE(), INTERVAL 1 YEAR) AND (yahrzeit_type = mourner_observance_preference)
+	AND contact_b.mourner_contact_id in ($cid_list)
+        $date_where_clause
+      ORDER BY sort_name asc";
 
-    if (strlen($yahrzeit_sql) > 0) {
-      $dao =& CRM_Core_DAO::executeQuery( $yahrzeit_sql, CRM_Core_DAO::$_nullArray );
+    if ($yahrzeit_sql) {
+      $dao = CRM_Core_DAO::executeQuery($yahrzeit_sql);
+
       /*
       // Figure out how to format date for this locale
       $config = CRM_Core_Config::singleton( );
@@ -2951,9 +2950,8 @@ class HebrewCalendar {
        */
 
       $tmp_deceasedids_for_con = array();
-      // print "<br<br>About to process yahrzeit records. ";
-      while ( $dao->fetch( ) ) {
 
+      while ($dao->fetch()) {
         $cid = $dao->contact_id;
         $mourner_name = $dao->sort_name;
         $deceased_name = $dao->deceased_name;
@@ -3052,15 +3050,17 @@ class HebrewCalendar {
             }
 
             // Yahrzeit Hebrew date, written in Hebrew letters.
-            if( isset( $values[$cid][$token_yah_hebrew_date_hebrew] ) && strlen($values[$cid][$token_yah_hebrew_date_hebrew]) > 0  ){
+            if (!empty($values[$cid][$token_yah_hebrew_date_hebrew])) {
               $values[$cid][$token_yah_hebrew_date_hebrew] = $values[$cid][$token_yah_hebrew_date_hebrew].$default_seperator.$yahrzeit_hebrew_date_format_hebrew;
-            }else{
+	    }
+            else {
               $values[$cid][$token_yah_hebrew_date_hebrew] = $yahrzeit_hebrew_date_format_hebrew;
             }
 
-            if( isset($values[$cid][$token_yah_dec_death_english_date]) && strlen( $values[$cid][$token_yah_dec_death_english_date]) > 0 ){
+            if (!empty($values[$cid][$token_yah_dec_death_english_date])) {
               $seper = $default_seperator;
-            }else{
+	    }
+            else{
               $seper = "";
             };
 
