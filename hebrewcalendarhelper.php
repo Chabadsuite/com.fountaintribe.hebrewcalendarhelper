@@ -145,10 +145,14 @@ function hebrewcalendarhelper_civicrm_tokenValues(&$values, &$contactIDs, $job =
 
     $token_yah_english_date_morning = 'yahrzeit.morning_format_english'; // English date of yahrzeit (morning after candle is lit)
 
+    // Mixing tokens of different date ranges can cause unexpected behavior
+    // since only the date range of the last token will be used.
+    $token_date_portion = NULL;
+
     // CiviCRM is buggy here, if token is being used in CiviMail, we need to use the key
     // as the token. Otherwise (PDF Letter, one-off email, etc) we
     // need to use the value.
-    while ($cur_token_raw = current($tokens['yahrzeit'] )) {
+    while ($cur_token_raw = current($tokens['yahrzeit'])) {
       $tmp_key = key($tokens['yahrzeit']);
       $cur_token = '';
 
@@ -165,7 +169,12 @@ function hebrewcalendarhelper_civicrm_tokenValues(&$values, &$contactIDs, $job =
       $partial_token = $token_as_array[0];
 
       if (isset($token_as_array[1]) && strlen($token_as_array[1]) > 0) {
-        $token_date_portion = $token_as_array[1];
+        if ($token_date_portion && $token_date_portion != $token_as_array[1]) {
+          Civi::log()->warning("hebrewcalendarhelper: the message had tokens for different ranges ($token_date_portion and {$token_as_array[1]}. This may provide unexpected results.");
+        }
+        else {
+          $token_date_portion = $token_as_array[1];
+        }
       }
 
       if ($partial_token == 'deceased_name') {
